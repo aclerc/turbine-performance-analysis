@@ -19,10 +19,14 @@ if __name__ == "__main__":
     logger.info(msg)
 
     zx_device_id = 2429  # 2429 is Altahullion 2 ground mounted LiDAR
+    start_dt = pd.Timestamp("2025-12-20")
+    end_dt_excl = pd.Timestamp("2026-01-20")
+    msg = f"loading LiDAR data for {zx_device_id=} from {start_dt=} to {end_dt_excl=}"
+    logger.info(msg)
     df = get_zx_lidar_data(
         zx_device_id=zx_device_id,
-        start_dt=pd.Timestamp("2025-12-20"),
-        end_dt_excl=pd.Timestamp("2026-01-20"),
+        start_dt=start_dt,
+        end_dt_excl=end_dt_excl,
         cache_dir=None,
     )
     msg = f"{df.head()=}"
