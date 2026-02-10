@@ -1,0 +1,105 @@
+[project]
+name = "turbine-performance-analysis"
+dynamic = ["version"]
+description = ""
+authors = [{ name = "Alex Clerc", email = "alex.clerc@res-group.com" }]
+requires-python = ">=3.12,<4"
+readme = "README.md"
+dependencies = [
+    "ephem>=4.2",
+    "numpy>=2.4.2",
+    "pandas[pyarrow,hdf5]>=2.2.1,<3",
+    "scipy>=1.17.0",
+]
+
+[dependency-groups]
+dev = [
+    "pandas-stubs>=2.2.0.240218,<3",
+    "ruff>=0.14.0",
+    "poethepoet>=0.37.0",
+    "mypy>=1.18.2",
+    "pytest>=8.4.2",
+    "coverage>=7.10.7",
+    "deptry>=0.23.1",
+    "scipy-stubs>=1.17.0.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lidar_analysis","scripts"]
+
+[tool.hatch.version]
+path = "src/lidar_analysis/__init__.py"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+show-fixes = true
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D100", # module docstring not required
+    "D101", # class docstring not required
+    "D102", # method docstrings not required; would be good to fix this up
+    "D203",  # `one-blank-line-before-class` conflicts with D211 `blank-line-before-class`
+    "D107", # docstring in `__init__`
+    "D213",  # 'multi-line-summary-second-line' conflicts with D212 'multi-line-summary-starts-with-capital-letter'
+    "COM812",  # can conflict with formatter
+    "ISC001",  # can conflict with formatter
+    "ANN204", # `__init__` doesn't need annotations
+    "N806", # allow non-conforming argument names like `X_train`, `OTC_TableLambdaToPitchOptX`
+    "PLR0913", # allow functions with too many arguments
+    "C901", # allow complex functions; would be good to fix this up
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "S101", # Ignore use of `assert` in tests
+    "PLR2004", # Magic values allowed in tests
+    "D103", # OK to not document every function in tests
+]
+"__init__.py" = ["D"]
+
+[tool.mypy]
+python_version = 3.12
+
+[[tool.mypy.overrides]]
+module = ["ephem"]
+ignore_missing_imports = true
+
+[tool.coverage.report]
+exclude_lines = ["if __name__ == .__main__.:"]
+
+[tool.poe.tasks]
+[tool.poe.tasks.lint]
+help = "Runs formater and linter"
+sequence = [
+    { cmd = "ruff format ." },
+    { cmd = "ruff check . --fix" },
+    { cmd = "mypy ." },
+    { cmd = "deptry src" },
+]
+
+[tool.poe.tasks.lint-check]
+help = "Checks using formater and linter"
+sequence = [
+    { cmd = "ruff format . --check" },
+    { cmd = "ruff check ." },
+    { cmd = "mypy ." },
+    { cmd = "deptry src" },
+]
+
+[tool.poe.tasks.test]
+help = "Runs unit tests and show coverage"
+sequence = [
+    { cmd = "coverage run --source=src/lidar_analysis -m pytest ./tests" },
+    { cmd = "coverage report -m" },
+]
+
+[tool.poe.tasks.all]
+help = "Run all required pre-push commands"
+sequence = [{ ref = "lint" }, { ref = "test" }]
