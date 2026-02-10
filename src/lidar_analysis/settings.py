@@ -3,7 +3,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-REPO_NAME = "res-zx-collaboration"
+REPO_NAME = Path(__file__).resolve().parent.parent.parent.name
 
 
 def get_zx_lidar_cache_dir() -> Path:
