@@ -125,7 +125,7 @@ def get_zx_lidar_data(
     device_decr = "ZTM" if zx_device_id >= 5000 else ""  # noqa:PLR2004
     file_paths = [
         get_zx_lidar_cache_dir()
-        / "timeseries"
+        #/ "timeseries"
         / str(zx_device_id)
         / f"Wind_{device_decr}{zx_device_id}@{d.strftime('Y%Y_M%m_D%d')}.parquet"
         for d in _generate_dates_in_range(start_dt=start_dt, end_dt_excl=end_dt_excl)
