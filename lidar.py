@@ -407,6 +407,25 @@ def graph_data(xopt, yopt, #x-values and y-values, generally input as the opt fo
                y_vals2=[], y_vals3=[], y_vals4=[], y_vals5=[], y_vals6=[], #to plot multiple lists on y-axis of one graph
                savefig=False, show=True, #saves figure as file, displays figure on screen, respectively
                hue='purple', ax=0, setxlabel=True, x_label='', y_label=''):
+    """
+    This script is for graphing data.
+    
+    Inputs:
+        - xopt: typically the shortcut for findVariable, could also be a list
+        - yopt: typically the shortcut for findVariable, could also be a list
+        - findxopt, findyopt: set to False if xopt or yopt is a list, respectively
+        - y_vals: extra lists of dependent variables to be plotted on the same x-axis
+        - savefig (string or boolean): saves the figure with variable name if not False
+        - show: displays figure if True
+        - setxlabel: automatically finds xlabel if True
+        - x_label, y_label: overrides x and y labels, respectively
+        - hue: color of dots in scatterplot
+        - si: size of dots in scatterplot
+        - ax: for when graphing multiple
+    
+    Returns: None
+    See get_shear_veer for example use
+    """
     if ax==0: fig, ax=plt.subplots(figsize=(6,3))
     plt.style.use('bmh')
     if findxopt: x_vals = findVariable(xopt)

@@ -1,7 +1,9 @@
 import polars as pl 
 import matplotlib.pyplot as plt
 import numpy as np
-
+"""
+This script reads and processes turbine SCADA data.
+"""
 def get_alta_file(date, #in YYYYMMDD format
                   read=False):
     if read: return pl.read_parquet(rf"C:\Users\lashe\packages\UROPFiles\cache\fl_resampled\ALTA2\1301257\{date}.parquet")
@@ -10,6 +12,7 @@ def get_alta_file(date, #in YYYYMMDD format
 
 td60 = 0    
 td60data = {}
+#finds appropriate files
 def process(start=20250905, end=20260301):
     global td60
     files = []
@@ -173,6 +176,26 @@ def graph_data(xopt, yopt, findxopt=True, findyopt=True,
                y_vals2=[], y_vals3=[], y_vals4=[], y_vals5=[], y_vals6=[],
                savefig=False, show=True, setxlabel=True, x_label='', y_label='',
                hue='purple', si=3, ax=0):
+    """
+    This script is for graphing data.
+    
+    Inputs:
+        - xopt: typically the shortcut for findVariable, could also be a list
+        - yopt: typically the shortcut for findVariable, could also be a list
+        - findxopt, findyopt: set to False if xopt or yopt is a list, respectively
+        - y_vals: extra lists of dependent variables to be plotted on the same x-axis
+        - savefig (string or boolean): saves the figure with variable name if not False
+        - show: displays figure if True
+        - setxlabel: automatically finds xlabel if True
+        - x_label, y_label: overrides x and y labels, respectively
+        - hue: color of dots in scatterplot
+        - si: size of dots in scatterplot
+        - ax: for when graphing multiple
+    
+    Returns: None
+
+    See graph_multiple for example use
+    """
     if ax==0: fig, ax=plt.subplots(figsize=(6,3))
     plt.style.use('bmh')
     if findxopt: x_vals = findVariable(xopt)

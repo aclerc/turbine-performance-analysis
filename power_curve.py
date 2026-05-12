@@ -4,6 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 
+'''This script plots the power curve and a Cp graph. It also combines turbine and lidar, 
+so it will be helpful for writing methods that heavily rely on both sets of variables'''
+
 lidar_df = lidar.process("2025-09-21", "2025-12-24")
 lidar_df = lidar.filter(lidar_df)
 turbine_df = turbine.process(20250921, 20251223).collect()

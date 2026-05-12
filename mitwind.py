@@ -3,6 +3,7 @@ from mitwindfarm import Uniform, PowerLaw, Niayifar, Layout, GridLayout, Windfar
 from MITRotor.ReferenceTurbines import IEA3_4MW, IEA15MW
 from MITRotor.Momentum import UnifiedMomentum
 from MITRotor.TipLoss import PrandtlTipLoss
+from MITRotor.Aerodynamics import KraghAerodynamics
 from pathlib import Path
 from scipy.optimize import minimize
 from rich import print
@@ -12,6 +13,10 @@ import MITRotor as mr
 from numpy.typing import ArrayLike
 from mitwindfarm.Windfield import Windfield
 
+'''This script is a modified example of MITWindfarm that sets up a basic wind farm 
+and outputs a visual of the farm under simplified wind conditions.'''
+
+#describes windfield, see abstract class in Windfield.py for more information
 class myWindField(Windfield):
     """
     Concrete implementation of a power law wind field.
@@ -46,14 +51,13 @@ class myWindField(Windfield):
         return self.TIamb * np.ones_like(x)
 
     def wdir(self, x: ArrayLike, y: ArrayLike, z: ArrayLike) -> ArrayLike:
-        return np.full_like(x, np.pi) 
+        return np.full_like(x, np.pi/6) 
 
 FIGDIR = Path(__file__).parent.parent / "fig"
 FIGDIR.mkdir(exist_ok=True, parents=True)
 
 uniform_wind_field = Uniform(U0=5)
-rotor_bem = BEM(IEA3_4MW(), momentum_model=UnifiedMomentum())
-rotor_bem2 = BEM(IEA3_4MW(), momentum_model=UnifiedMomentum(), tiploss_model=PrandtlTipLoss())
+rotor_bem = BEM(IEA3_4MW(), momentum_model=UnifiedMomentum(), aerodynamic_model = KraghAerodynamics())
 gaussian_wake_model = GaussianWakeModel()
 niayifar_superposition = Niayifar()
 
@@ -61,6 +65,7 @@ windfarm_unified_bem = Windfarm(rotor_model = rotor_bem, wake_model = gaussian_w
                                 superposition = niayifar_superposition,
                                 base_windfield = myWindField(Uref=5, zref=49, exp=0.2), TIamb = 0.0)
 
+#adjusted coordinates of Altahullion
 xs = [-7.025673286343040, -7.027825861471880, -7.031686473251470,
       -7.018845156557210, -7.023359900029670, -7.027901986951650,
       -7.031306770597570, -7.018780343888710, -7.021212846200650]

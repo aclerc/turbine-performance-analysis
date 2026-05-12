@@ -4,6 +4,8 @@ import matplotlib.cm as cm
 import numpy as np
 import random
 
+'''used for various tasks, not essential script'''
+
 s=[i for i in range(1, 26)]
 fake_powers=[i for i in range(1, 26)]
 p=[]
