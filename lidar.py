@@ -585,7 +585,6 @@ def instant_get_shear_veer(t):
         if not shear_val is None:
             instantx.append(t)
             instanty.append(shear_val)
-            print('line ran')
         veer_val = veer(time=0, timestampy=t, find_close_time=False)
         if not veer_val is None:
             instanty2.append(veer_val)
